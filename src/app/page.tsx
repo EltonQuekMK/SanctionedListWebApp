@@ -1,94 +1,81 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const [query, setQuery] = useState("");
+  interface ResultItem {
+    FIRST_NAME: string;
+    SECOND_NAME: string;
+    THIRD_NAME: string;
+    TYPE: string;
+    ALIAS: { ALIAS_NAME: string }[];
+    ADDRESS: { COUNTRY: string }[];
+    DATE_OF_BIRTH: string;
+    PLACE_OF_BIRTH: {
+      CITY: string;
+      STATE_PROVINCE: string;
+      COUNTRY: string;
+    };
+    NAME_ORIGINAL_SCRIPT: string;
+    TITLE: string;
+  }
+
+  const [results, setResults] = useState<{ item: ResultItem }[]>([]);
+
+  const handleSearch = async () => {
+    const response = await fetch("http://localhost:3001/search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      setResults(data.results);
+    } else {
+      console.error("Search failed");
+    }
+  };
+
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+      <div className={styles.centerContainer}>
+        <div className={styles.searchBar}>
+          <h1>Sanctioned List Search</h1>
+          <input
+            type="text"
+            placeholder="Search..."
+            className={styles.searchInput}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className={styles.searchButton} onClick={handleSearch}>
+            Search
+          </button>
         </div>
-      </main>
+        {results.length > 0 && (
+          <div className={styles.results}>
+            {results.map((result, index) => (
+              <div key={index} className={styles.resultItem}>
+                <h2>{result.item.FIRST_NAME} {result.item.SECOND_NAME} {result.item.THIRD_NAME}</h2>
+                <p>Type: {result.item.TYPE}</p>
+                <p>Aliases: {result.item.ALIAS.map(alias => alias.ALIAS_NAME).join(", ")}</p>
+                <p>Address: {result.item.ADDRESS.map(address => address.COUNTRY).join(", ")}</p>
+                <p>Date of Birth: {result.item.DATE_OF_BIRTH}</p>
+                <p>Place of Birth: {result.item.PLACE_OF_BIRTH.CITY}, {result.item.PLACE_OF_BIRTH.STATE_PROVINCE}, {result.item.PLACE_OF_BIRTH.COUNTRY}</p>
+                <p>Original Script: {result.item.NAME_ORIGINAL_SCRIPT}</p>
+                <p>Title: {result.item.TITLE}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        {/* Add footer content here */}
       </footer>
     </div>
   );

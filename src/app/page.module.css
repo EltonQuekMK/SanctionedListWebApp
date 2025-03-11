@@ -4,13 +4,13 @@
   --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
 
   --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
+  --button-secondary-hover: #767676;
 
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-items: center;
-  min-height: 100svh;
+  justify-content: center;
+  min-height: 100vh;
   padding: 80px;
   gap: 64px;
   font-family: var(--font-geist-sans);
@@ -165,4 +165,61 @@ a.secondary {
   .logo {
     filter: invert();
   }
+}
+
+.centerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.searchBar {
+  width: 90%; /* Ensure the search bar spans most of the width */
+  max-width: 1200px; /* Set a maximum width */
+  margin: 0 auto;
+  padding: 10px 20px;
+  border: 1px solid var(--gray-alpha-200); /* Ensure the border is visible */
+  border-radius: 24px;
+  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--background);
+  gap: 16px;
+}
+
+.searchInput {
+  width: 100%; /* Ensure the input spans the full width of the search bar */
+  border: 1px solid #dfe1e5; /* Light gray border */
+  border-radius: 24px; /* Rounded corners */
+  outline: none;
+  font-size: 16px;
+  padding: 10px 20px; /* Add padding for a better look */
+  font-family: var(--font-geist-sans);
+  background-color: white; /* White background */
+  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28); /* Subtle shadow */
+  transition: box-shadow 0.3s ease; /* Smooth transition for shadow */
+}
+
+.searchInput:focus {
+  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.4); /* Slightly darker shadow on focus */
+}
+
+.searchButton {
+  background-color: var(--button-primary-hover);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: var(--font-geist-sans);
+  transition: background-color 0.3s ease;
+}
+
+.searchButton:hover {
+  background-color: var(--button-secondary-hover);
 }
