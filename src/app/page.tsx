@@ -52,6 +52,16 @@ export default function Home() {
     }
   };
 
+  const renderPlaceOfBirth = (placeOfBirth: {
+    CITY: string;
+    STATE_PROVINCE: string;
+    COUNTRY: string;
+  }): string => {
+    const { CITY, STATE_PROVINCE, COUNTRY } = placeOfBirth;
+    const parts = [CITY, STATE_PROVINCE, COUNTRY].filter(Boolean);
+    return parts.length > 0 ? `Place of Birth: ${parts.join(", ")}` : "";
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.centerContainer}>
@@ -72,18 +82,21 @@ export default function Home() {
         {searchExecuted && (
           results.length > 0 ? (
             <div className={styles.results}>
-              {results.map((result, index) => (
-                <div key={index} className={styles.resultItem}>
-                  <h2>{result.item.FIRST_NAME} {result.item.SECOND_NAME} {result.item.THIRD_NAME}</h2>
-                  <p>Type: {result.item.TYPE}</p>
-                  <p>Aliases: {result.item.ALIAS.map(alias => alias.ALIAS_NAME).join(", ")}</p>
-                  <p>Address: {result.item.ADDRESS.map(address => address.COUNTRY).join(", ")}</p>
-                  {result.item.DATE_OF_BIRTH && <p>Date of Birth: {result.item.DATE_OF_BIRTH}</p>}
-                  {result.item.PLACE_OF_BIRTH && <p>Place of Birth: {result.item.PLACE_OF_BIRTH.CITY}, {result.item.PLACE_OF_BIRTH.STATE_PROVINCE}, {result.item.PLACE_OF_BIRTH.COUNTRY}</p>}
-                  {result.item.NAME_ORIGINAL_SCRIPT && <p>Original Script: {result.item.NAME_ORIGINAL_SCRIPT}</p>}
-                  {result.item.TITLE && <p>Title: {result.item.TITLE}</p>}
-                </div>
-              ))}
+              {results.map((result, index) => {
+                const alias = result.item.ALIAS.map(alias => alias.ALIAS_NAME).join(", ");
+                // const address = result.item.ADDRESS.join(", ");
+                return (
+                  <div key={index} className={styles.resultItem}>
+                    <h2>{result.item.FIRST_NAME} {result.item.SECOND_NAME} {result.item.THIRD_NAME}</h2>
+                    <span className={`badge rounded-pill ${result.item.TYPE === "individual" ? "text-bg-primary" : "text-bg-info"} text-uppercase`}>{result.item.TYPE}</span>
+                    {alias && <p>Alias: {alias}</p>}
+                    {result.item.NAME_ORIGINAL_SCRIPT && <p>Original Script: {result.item.NAME_ORIGINAL_SCRIPT}</p>}
+                    {result.item.TITLE && <p>Title: {result.item.TITLE}</p>}
+                    {/* {address && <p>Address: {address}</p>} */}
+                    {renderPlaceOfBirth(result.item.PLACE_OF_BIRTH) && <p>{renderPlaceOfBirth(result.item.PLACE_OF_BIRTH)}</p>}
+                  </div>
+                )
+              })}
             </div>
           ) : (
             <p>No results found for query "{searchQuery}"</p>
