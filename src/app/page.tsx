@@ -20,10 +20,17 @@ interface ResultItem {
   TITLE: string;
 }
 
+interface Result {
+  item: ResultItem;
+  score: number;
+  requirementFrom: string;
+  siteName: string;
+  url: string;
+}
 
 export default function Home() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<{ item: ResultItem }[]>([]);
+  const [results, setResults] = useState<Result[]>([]);
   const [searchExecuted, setSearchExecuted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -46,7 +53,11 @@ export default function Home() {
     setSearchExecuted(true);
   };
 
-  const handleKeyDown = (e) => {
+  interface KeyboardEvent {
+    key: string;
+  }
+
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter") {
       handleSearch();
     }
@@ -88,12 +99,25 @@ export default function Home() {
                 return (
                   <div key={index} className={styles.resultItem}>
                     <h2>{result.item.FIRST_NAME} {result.item.SECOND_NAME} {result.item.THIRD_NAME}</h2>
-                    <span className={`badge rounded-pill ${result.item.TYPE === "individual" ? "text-bg-primary" : "text-bg-info"} text-uppercase`}>{result.item.TYPE}</span>
+                    <p><span className={`badge rounded-pill ${result.item.TYPE === "individual" ? "text-bg-primary" : "text-bg-info"} text-uppercase`}>{result.item.TYPE}</span></p>
                     {alias && <p>Alias: {alias}</p>}
                     {result.item.NAME_ORIGINAL_SCRIPT && <p>Original Script: {result.item.NAME_ORIGINAL_SCRIPT}</p>}
                     {result.item.TITLE && <p>Title: {result.item.TITLE}</p>}
                     {/* {address && <p>Address: {address}</p>} */}
                     {renderPlaceOfBirth(result.item.PLACE_OF_BIRTH) && <p>{renderPlaceOfBirth(result.item.PLACE_OF_BIRTH)}</p>}
+                    <p>
+                      <span className={`badge rounded-pill text-bg-secondary text-uppercase`}>{result.requirementFrom}</span>
+                      &nbsp;
+                      <a
+                        href={result.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.link}
+                        title={result.siteName}
+                      >
+                        {"Source >"}
+                      </a>
+                    </p>
                   </div>
                 )
               })}
