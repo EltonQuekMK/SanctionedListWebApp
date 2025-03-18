@@ -139,6 +139,31 @@
   text-decoration: underline;
 }
 
+.resultItemFooter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.detailsButton {
+  background-color: var(--button-primary-hover);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: var(--font-geist-sans);
+  transition: background-color 0.3s ease;
+  margin-left: auto;
+  /* Push the button to the right */
+}
+
+.detailsButton:hover {
+  background-color: var(--button-secondary-hover);
+}
+
 @media (max-width: 1024px) {
   .page {
     flex-direction: column;

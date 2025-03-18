@@ -20,6 +20,7 @@ interface ResultItem {
   };
   NAME_ORIGINAL_SCRIPT: string;
   TITLE: string;
+  COMMENTS: string;
 }
 
 interface Result {
@@ -68,7 +69,7 @@ export default function Home() {
   const renderPlaceOfBirth = (placeOfBirth: PlaceOfBirth): string => {
     const { CITY, STATE_PROVINCE, COUNTRY } = placeOfBirth;
     const parts = [CITY, STATE_PROVINCE, COUNTRY].filter(Boolean);
-    return parts.length > 0 ? `Place of Birth: ${parts.join(", ")}` : "";
+    return parts.length > 0 ? `${parts.join(", ")}` : "";
   };
 
   return (
@@ -96,13 +97,14 @@ export default function Home() {
                 return (
                   <div key={index} className={styles.resultItem}>
                     <h2>{result.item.FIRST_NAME} {result.item.SECOND_NAME} {result.item.THIRD_NAME}</h2>
-                    <p><span className={`badge rounded-pill ${result.item.TYPE === "individual" ? "text-bg-primary" : "text-bg-info"} text-uppercase`}>{result.item.TYPE}</span></p>
-                    {alias && <p>Alias: {alias}</p>}
-                    {result.item.NAME_ORIGINAL_SCRIPT && <p>Original Script: {result.item.NAME_ORIGINAL_SCRIPT}</p>}
-                    {result.item.TITLE && <p>Title: {result.item.TITLE}</p>}
+                    <p><span className={`badge rounded-pill ${result.item.TYPE === "individual" ? "text-bg-primary" : "text-bg-success"} text-uppercase`}>{result.item.TYPE}</span></p>
+                    {alias && <p><b>Alias:</b> {alias}</p>}
+                    {result.item.NAME_ORIGINAL_SCRIPT && <p><b>Original Script:</b> {result.item.NAME_ORIGINAL_SCRIPT}</p>}
+                    {result.item.TITLE && <p><b>Title:</b> {result.item.TITLE}</p>}
                     {/* {address && <p>Address: {address}</p>} */}
-                    {renderPlaceOfBirth(result.item.PLACE_OF_BIRTH) && <p>{renderPlaceOfBirth(result.item.PLACE_OF_BIRTH)}</p>}
-                    <p>
+                    {renderPlaceOfBirth(result.item.PLACE_OF_BIRTH) && <p><b>Place of Birth:</b> {renderPlaceOfBirth(result.item.PLACE_OF_BIRTH)}</p>}
+                    {result.item.COMMENTS && <p><b>Comments:</b> {result.item.COMMENTS}</p>}
+                    <p className={styles.resultItemFooter}>
                       <span className={`badge rounded-pill text-bg-secondary text-uppercase`}>{result.requirementFrom}</span>
                       &nbsp;
                       <a
@@ -112,9 +114,12 @@ export default function Home() {
                         className={styles.link}
                         title={result.siteName}
                       >
-                        {"Source >"}
+                        {result.siteName + " >"}
                       </a>
                     </p>
+                    {/* <p>
+                      <button className={styles.detailsButton} onClick={handleSearch}>Details</button>
+                    </p> */}
                   </div>
                 )
               })}
