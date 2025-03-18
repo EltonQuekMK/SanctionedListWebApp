@@ -85,9 +85,7 @@ export default function Home() {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button className={styles.searchButton} onClick={handleSearch}>
-            Search
-          </button>
+          <button className={styles.searchButton} onClick={handleSearch} />
         </div>
         {searchExecuted && (
           results.length > 0 ? (

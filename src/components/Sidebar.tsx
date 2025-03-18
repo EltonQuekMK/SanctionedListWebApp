@@ -16,6 +16,7 @@ interface GroupedWebsites {
 
 export default function Sidebar() {
     const [websites, setWebsites] = useState<GroupedWebsites>({});
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const fetchWebsites = async () => {
@@ -45,9 +46,16 @@ export default function Sidebar() {
         return result;
     };
 
+    const toggleSidebar = () => {
+        setIsOpen((prevOpen) => !prevOpen);
+    };
+
     return (
         <div className={styles.sidebarContainer}>
-            <div className={styles.sidebar}>
+            <button className={styles.toggleButton} onClick={toggleSidebar}>
+                ☰
+            </button>
+            <div className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
                 <div className={styles.sidebarContent}>
                     <h1>Lists</h1>
                     {Object.keys(websites).map((requirementFrom) => (
