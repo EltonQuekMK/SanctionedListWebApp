@@ -1,7 +1,9 @@
 "use client";
 
+import Sidebar from "@/components/Sidebar";
 import { useState } from "react";
 import styles from "./page.module.css";
+import axios from "axios";
 
 interface ResultItem {
   FIRST_NAME: string;
@@ -32,19 +34,13 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Result[]>([]);
   const [searchExecuted, setSearchExecuted] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = async () => {
-    const response = await fetch("http://localhost:3001/search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ query }),
-    });
+    const response = await axios.post("http://localhost:3001/search", { query });
 
-    if (response.ok) {
-      const data = await response.json();
+    if (response.status === 200) {
+      const data = await response.data;
       setResults(data.results);
     } else {
       console.error("Search failed");
@@ -63,11 +59,13 @@ export default function Home() {
     }
   };
 
-  const renderPlaceOfBirth = (placeOfBirth: {
+  interface PlaceOfBirth {
     CITY: string;
     STATE_PROVINCE: string;
     COUNTRY: string;
-  }): string => {
+  }
+
+  const renderPlaceOfBirth = (placeOfBirth: PlaceOfBirth): string => {
     const { CITY, STATE_PROVINCE, COUNTRY } = placeOfBirth;
     const parts = [CITY, STATE_PROVINCE, COUNTRY].filter(Boolean);
     return parts.length > 0 ? `Place of Birth: ${parts.join(", ")}` : "";
@@ -75,6 +73,7 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
+      <Sidebar />
       <div className={styles.centerContainer}>
         <div className={styles.searchBar}>
           <h1>Sanctioned List Search</h1>
@@ -130,6 +129,6 @@ export default function Home() {
       <footer className={styles.footer}>
         {/* Add footer content here */}
       </footer>
-    </div >
+    </div>
   );
 }
