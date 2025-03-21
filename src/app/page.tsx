@@ -38,7 +38,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = async () => {
-    const response = await axios.post("http://localhost:3001/search", { query });
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/search`, { query });
 
     if (response.status === 200) {
       const data = await response.data;
@@ -125,7 +125,7 @@ export default function Home() {
               })}
             </div>
           ) : (
-            <p>No results found for query "{searchQuery}"</p>
+            <p>No results found for query &quot;{searchQuery}&quot;</p>
           )
         )}
       </div>

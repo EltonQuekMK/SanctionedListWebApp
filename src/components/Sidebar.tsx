@@ -21,7 +21,7 @@ export default function Sidebar() {
     useEffect(() => {
         const fetchWebsites = async () => {
             try {
-                const response = await axios.get("http://localhost:3001/websitesList");
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/websitesList`);
                 const data = response.data.data;
                 const grouped: GroupedWebsites = data.reduce((acc: GroupedWebsites, website: Website) => {
                     if (!acc[website.requirementFrom]) {
