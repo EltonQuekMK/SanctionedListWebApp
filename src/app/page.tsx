@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import { useState } from "react";
 import styles from "./page.module.css";
 import axios from "axios";
+import { Search } from 'lucide-react';
 
 interface ResultItem {
   FIRST_NAME: string;
@@ -77,16 +78,20 @@ export default function Home() {
       <Sidebar />
       <div className={styles.centerContainer}>
         <div className={styles.searchBar}>
-          <h1>Sanctioned List Search</h1>
-          <input
-            type="text"
-            placeholder="Search..."
-            className={styles.searchInput}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <button className={styles.searchButton} onClick={handleSearch} />
+          {!searchExecuted && <div className={styles.searchBarTitle}><h1>Sanctioned List Search</h1></div>}
+          <div className={styles.searchInputGroup}>
+            <input
+              type="text"
+              placeholder="Search..."
+              className={styles.searchInput}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button className={styles.searchButton} onClick={handleSearch}>
+              <span>Search</span> <Search />
+            </button>
+          </div>
         </div>
         {searchExecuted && (
           results.length > 0 ? (
